@@ -1,5 +1,6 @@
 require_relative "piece"
 require 'byebug'
+
 class Board
   # attr_accessor :grid #debug
   def initialize
@@ -7,27 +8,26 @@ class Board
     set_grid 
   end 
   
-  def [](pos)
-    x,y = pos  
-    @grid[y][x]
-  end 
-  
-  def []=(pos,value)
-    x,y = pos
-    #debugger
-    @grid[y][x] = value
+  def grid_symbols
+    grid_symbols = Array.new(grid.size){Array.new(grid.count,nil)}
+    @grid.each_with_index do |row, y|
+      row.each_with_index do |piece, x|
+        grid_symbols[y][x] = piece.symbol
+      end 
+    end 
+    grid_symbols
   end
   
   def set_grid
+    null_piece = NullPiece.instance
     fresh_board = starting_positions
     fresh_board.each_with_index do |row, y|
       row.each_with_index do |piece_sym, x|
-        self[[x,y]] = Piece.new(piece_sym)
+        !piece_sym.nil? ? self[[x,y]] = Piece.new(piece_sym, [x,y], self) : null_piece
       end 
     end  
   end
       
-  
   def starting_positions 
    [[:r ,:k ,:b ,:q ,:K ,:b ,:k ,:r ],
     [:p ,:p ,:p ,:p ,:p ,:p ,:p ,:p ],
@@ -50,6 +50,17 @@ class Board
   end 
   
   private
-  attr_accessor :grid #debug
+  attr_accessor :grid 
+  def [](pos)
+    x,y = pos  
+    @grid[y][x]
+  end 
+  
+  def []=(pos,value)
+    x,y = pos
+    #debugger
+    @grid[y][x] = value
+  end
+  
   
 end

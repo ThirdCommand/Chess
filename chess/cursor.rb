@@ -1,4 +1,5 @@
 require "io/console"
+require "colorize"
 
 KEYMAP = {
   " " => :space,
@@ -92,7 +93,6 @@ class Cursor
       return_cursor
     when :newline
     when :escape
-    when :up
     when :down
     when :right
     when :left
@@ -108,18 +108,19 @@ class Cursor
   end
   
   def valid_move?(key_press)
-    new_pos_x = cursor_pos[0] + MOVES[key_press][0]
-    new_pos_y = cursor_pos[1] + MOVES[key_press][1]
-    (0...8).cover(new_pos_x) && (0...8).cover(new_pos_y)
+    # might be better in board
+    new_pos_x = cursor_pos[1] + MOVES[key_press][0]
+    new_pos_y = cursor_pos[0] + MOVES[key_press][1]
+    (0...8).cover?(new_pos_x) && (0...8).cover?(new_pos_y)
   end
   
   def update_pos(key_press)
     if valid_move?(key_press)
-      cursor_pos[0] += MOVES[key_press][0]
-      cursor_pos[1] += MOVES[key_press][1]
+      cursor_pos[1] += MOVES[key_press][0]
+      cursor_pos[0] += MOVES[key_press][1]
     else 
       
     end
-    nil
+    cursor_pos
   end
 end
