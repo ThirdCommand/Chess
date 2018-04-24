@@ -76,8 +76,50 @@ class Cursor
   end
 
   def handle_key(key)
+    case key
+    when :space
+      return_cursor
+    when :down
+      update_pos(key)
+    when :up
+      update_pos(key)
+    when :right
+      update_pos(key)
+    when :left
+      update_pos(key)
+    when :tab
+    when :return
+      return_cursor
+    when :newline
+    when :escape
+    when :up
+    when :down
+    when :right
+    when :left
+    when :backspace
+    when :delete
+    when :ctrl_c
+      Process.exit(0)
+    end 
   end
-
-  def update_pos(diff)
+  
+  def return_cursor
+    cursor_pos
+  end
+  
+  def valid_move?(key_press)
+    new_pos_x = cursor_pos[0] + MOVES[key_press][0]
+    new_pos_y = cursor_pos[1] + MOVES[key_press][1]
+    (0...8).cover(new_pos_x) && (0...8).cover(new_pos_y)
+  end
+  
+  def update_pos(key_press)
+    if valid_move?(key_press)
+      cursor_pos[0] += MOVES[key_press][0]
+      cursor_pos[1] += MOVES[key_press][1]
+    else 
+      
+    end
+    nil
   end
 end

@@ -1,9 +1,9 @@
 require_relative "piece"
 require 'byebug'
 class Board
-  attr_accessor :grid #debug
+  # attr_accessor :grid #debug
   def initialize
-    @grid = Array.new(8){Array.new(8){nil}}
+    @grid = Array.new(8){Array.new(8,nil)}
     set_grid 
   end 
   
@@ -48,5 +48,8 @@ class Board
     # piece1.pos = end_pos
     # piece2.pos = start_pos 
   end 
+  
+  private
+  attr_accessor :grid #debug
   
 end
