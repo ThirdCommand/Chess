@@ -1,4 +1,5 @@
 require_relative "piece"
+
 require 'byebug'
 
 class Board
@@ -12,6 +13,7 @@ class Board
     grid_symbols = Array.new(grid.size){Array.new(grid.count,nil)}
     @grid.each_with_index do |row, y|
       row.each_with_index do |piece, x|
+
         grid_symbols[y][x] = piece.symbol
       end 
     end 
@@ -23,14 +25,34 @@ class Board
     fresh_board = starting_positions
     fresh_board.each_with_index do |row, y|
       row.each_with_index do |piece_sym, x|
-        !piece_sym.nil? ? self[[x,y]] = Piece.new(piece_sym, [x,y], self) : null_piece
+        self[[x, y]] = create_piece(piece_sym, [x,y]) #TODO properly assign colors
       end 
     end  
   end
+  
+  def create_piece(symbol, pos)
+    color = :white #TODO fix this 
+    case symbol
+    when :q
+      Queen.new( symbol, pos, self, color)
+    when :K
+      King.new(  symbol, pos, self, color)
+    when :k
+      Knight.new(symbol, pos, self, color)
+    when :b
+      Bishop.new(symbol, pos, self, color)
+    when :r 
+      Rook.new(  symbol, pos, self, color)
+    when :p
+      Pawn.new(  symbol, pos, self, color)
+    else 
+      NullPiece.instance 
+    end 
+  end 
       
   def starting_positions 
    [[:r ,:k ,:b ,:q ,:K ,:b ,:k ,:r ],
-    [:p ,:p ,:p ,:p ,:p ,:p ,:p ,:p ],
+    [nil,nil,nil,nil,nil,nil,nil,nil],
     [nil,nil,nil,nil,nil,nil,nil,nil],
     [nil,nil,nil,nil,nil,nil,nil,nil],
     [nil,nil,nil,nil,nil,nil,nil,nil],
@@ -49,7 +71,7 @@ class Board
     # piece2.pos = start_pos 
   end 
   
-  private
+  #private
   attr_accessor :grid 
   def [](pos)
     x,y = pos  

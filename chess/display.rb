@@ -12,6 +12,7 @@ class Display
     :p => 'p',
     nil => " "
   }
+  #"/u2654"
   def initialize(board)
     @board = board
     @cursor = Cursor.new([0,0], board)
@@ -51,12 +52,13 @@ end
 
 if __FILE__ == $0
   b = Board.new
+  p b[[0,0]].moves
   d = Display.new(b)
   d.render
-  loop do 
-    system("clear")
-    d.render
-    d.cursor.get_input
-    d.render
-  end 
+  # loop do 
+  #   system("clear")
+  #   d.render
+  #   d.cursor.get_input
+  #   d.render
+  # end 
 end
