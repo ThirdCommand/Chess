@@ -53,6 +53,11 @@ class Board
     threatened.any?{|pos| dboard[pos[1]][pos[0]].class == King}
     
   end
+  
+  def checkmate?(color)
+    # if king in check && (valid moves put him in check || no valid moves)
+    # if king in check && all valid moves keeps player in check # 
+  end
     
   
   
@@ -90,7 +95,8 @@ class Board
     [:r ,:k ,:b ,:K,:q ,:b ,:k ,:r ]]
   end 
   
-  def move_piece(start_pos, end_pos)
+  def move_piece(start_pos, end_pos, grid = nil)
+    
     #update grid and also piece's position
     piece1 = self[start_pos]
     piece2 = self[end_pos]
