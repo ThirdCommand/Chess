@@ -96,7 +96,9 @@ class Board
   end 
   
   def move_piece(start_pos, end_pos, grid = nil)
-    
+    if grid != nil
+      
+    end
     #update grid and also piece's position
     piece1 = self[start_pos]
     piece2 = self[end_pos]
