@@ -8,10 +8,15 @@ class Piece
       @board = board 
       @color = color 
     end
+    
+    def board_symbol 
+      @color == :white ? [:w, symbol] : [:b, symbol]
+    end
 
     def moves 
       []
     end 
+    
     
 end 
 

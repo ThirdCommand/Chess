@@ -40,6 +40,6 @@ module SLIDABLE
     return :blocked unless (0...8).cover?(move[0]) && (0...8).cover?(move[1])
     return :empty if board[move].symbol.nil?
     return :blocked if board[move].color == board[current_pos].color 
-    return :enemy_piece if board[move].color != board[cursor_pos].color
+    return :enemy_piece if board[move].color != board[current_pos].color
   end 
 end

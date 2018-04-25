@@ -23,9 +23,9 @@ class Display
     grid_symbols = board.grid_symbols 
     grid_symbols.each_with_index do |row,y|
       line = []
-      space = " ".colorize({:colors => :white, :background => :black})
-      row.each_with_index do |symbol, x|
-        line << color_translator([x,y],symbol, cursor.cursor_pos) 
+      space = " ".colorize({:color => :white, :background => :black})
+      row.each_with_index do |symbol_array, x|
+        line << color_translator([x,y],symbol_array, cursor.cursor_pos) 
       end 
       puts line.join()
     end 
@@ -34,11 +34,13 @@ class Display
   
   private
   
-  def color_translator(pos, symbol, cursor_pos)
+  def color_translator(pos, symbol_array, cursor_pos)
     y,x = pos
     color_hash = {}
-    (x + y) % 2 == 0 ? color_hash[:background] = :black : color_hash[:background] = :white
-    color_hash[:color] = :light_white
+    color = symbol_array[0]
+    symbol = symbol_array[1]
+    (x + y) % 2 == 0 ? color_hash[:background] = :blue : color_hash[:background] = :white
+    color == :w ? color_hash[:color] = :light_white : color_hash[:color] = :black
     color_hash[:background] = :red if cursor_pos == [y,x]
     color_hash[:mode] = :blink if cursor_pos == [y,x]
     
@@ -52,9 +54,11 @@ end
 
 if __FILE__ == $0
   b = Board.new
-  p b[[0,0]].moves
+
+  p b[[4,6]].moves
   d = Display.new(b)
   d.render
+  puts b.in_check?(:white)
   # loop do 
   #   system("clear")
   #   d.render

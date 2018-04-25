@@ -14,7 +14,7 @@ class Board
     @grid.each_with_index do |row, y|
       row.each_with_index do |piece, x|
 
-        grid_symbols[y][x] = piece.symbol
+        grid_symbols[y][x] = piece.board_symbol
       end 
     end 
     grid_symbols
@@ -30,8 +30,37 @@ class Board
     end  
   end
   
-  def create_piece(symbol, pos)
-    color = :white #TODO fix this 
+  def grid_dup
+    null_piece = NullPiece.instance 
+    different_board = starting_positions #same size at least 
+    grid.each_with_index do |row, y|
+      row.each_with_index do |piece, x|
+        different_board[y][x] = create_piece(piece.symbol, [x,y], piece.color)
+      end 
+    end
+    different_board 
+  end 
+  
+  def in_check?(color)
+    dboard = grid_dup #grid_dup create a grid, not a board 
+    not_color = dboard.flatten.select{|piece| piece.color != color}
+    opponent_pieces = not_color.select{|piece| piece.symbol != nil}
+    threatened = []
+    opponent_pieces.each do |piece|
+      piece_threatening = piece.moves 
+      threatened += piece_threatening
+    end 
+    threatened.any?{|pos| dboard[pos[1]][pos[0]].class == King}
+    
+  end
+    
+  
+  
+  def create_piece(symbol, pos, color = nil )
+    if color.nil?
+      color = :white if pos[1] > 5 #TODO fix this 
+      color = :black if pos[1] < 2
+    end 
     case symbol
     when :q
       Queen.new( symbol, pos, self, color)
@@ -52,7 +81,7 @@ class Board
       
   def starting_positions 
    [[:r ,:k ,:b ,:q ,:K ,:b ,:k ,:r ],
-    [nil,nil,nil,nil,nil,nil,nil,nil],
+    [:p ,:p ,:p ,:p ,:p ,:p ,:p ,:p ],
     [nil,nil,nil,nil,nil,nil,nil,nil],
     [nil,nil,nil,nil,nil,nil,nil,nil],
     [nil,nil,nil,nil,nil,nil,nil,nil],
